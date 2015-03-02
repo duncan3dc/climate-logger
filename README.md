@@ -25,3 +25,7 @@ $logger = new \duncan3dc\CLImate\Logger($climate);
 # Now my debug information will be yellow and black
 $somethingThatLogs->setLogger($logger);
 ```
+
+## Changelog
+---------
+A [Changelog](CHANGELOG.md) has been available since the beginning of time.
