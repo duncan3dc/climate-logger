@@ -12,14 +12,9 @@ use Psr\Log\LogLevel;
 class Logger extends AbstractLogger
 {
     /**
-     * @var CLImate $climate The underlying climate instance we are using for output.
+     * @var array $levels Conversion of the level strings to their numeric representations.
      */
-    protected $climate;
-
-    /**
-     * @var array $log_levels List of supported levels
-     */
-    protected $log_levels = [
+    protected $levels = [
         LogLevel::EMERGENCY =>  1,
         LogLevel::ALERT     =>  2,
         LogLevel::CRITICAL  =>  3,
@@ -31,24 +26,29 @@ class Logger extends AbstractLogger
     ];
 
     /**
-     * @var int $level - Ignore logging attempts at a level less the $level
+     * @var int $level Ignore logging attempts at a level less than this.
      */
-    protected $level = null;
+    protected $level;
+
+    /**
+     * @var CLImate $climate The underlying climate instance we are using for output.
+     */
+    protected $climate;
 
     /**
      * Create a new Logger instance.
      *
+     * @param mixed   $level   Either a LogLevel constant, or a string (eg 'debug'), or a number (1-8)
      * @param CLImate $climate An existing CLImate instance to use for output
-     * @param string  $level   Ignore logging attempts at a level less the $level
      */
-    public function __construct(CLImate $climate = null, $level=LogLevel::INFO)
+    public function __construct($level = LogLevel::INFO, CLImate $climate = null)
     {
+        $this->setLogLevel($level);
+
         if ($climate === null) {
             $climate = new CLImate;
         }
         $this->climate = $climate;
-
-        $this->setLogLevel($level);
 
         # Define some default styles to use for the output
         $commands = [
@@ -70,17 +70,56 @@ class Logger extends AbstractLogger
         }
     }
 
+
     /**
-     * @param string $level Ignore logging attempts at a level less the $level
+     * Get a numeric log level for the passed parameter.
+     *
+     * @param mixed $level Either a LogLevel constant, or a string (eg 'debug'), or a number (1-8)
+     *
+     * @return int
+     */
+    protected function convertLevel($level)
+    {
+        # If this is one of the defined string log levels then return it's numeric value
+        $key = strtolower($level);
+        if (isset($this->levels[$key])) {
+            return $this->levels[$key];
+        }
+
+        # If it doesn't look like a number, default to the most severe log level
+        if (!is_numeric($level)) {
+            return 1;
+        }
+
+        # If it's lower than the lowest level then default to the lowest level
+        if ($level < 1) {
+            return 1;
+        }
+
+        # If it's higher than the highest level then default to the highest
+        if ($level > 8) {
+            return 8;
+        }
+
+        # If it's already a valid numeric log level then return it
+        return $level;
+    }
+
+
+    /**
+     * Set the current level we are logging at.
+     *
+     * @param mixed $level Ignore logging attempts at a level less the $level
+     *
      * @return static
      */
-    public function setLogLevel($level) {
-        if ( ! isset($this->log_levels[$level]) ) {
-            throw new \InvalidArgumentException("Log level is invalid");
-        }
-        $this->level = $this->log_levels[$level];
+    public function setLogLevel($level)
+    {
+        $this->level = $this->convertLevel($level);
+
         return $this;
     }
+
 
     /**
      * Log messages to a CLImate instance.
@@ -93,10 +132,10 @@ class Logger extends AbstractLogger
      */
     public function log($level, $message, array $context = [])
     {
-        $logLevel = isset($this->log_levels[$level]) ? $level : LogLevel::EMERGENCY;
-        if ( $this->log_levels[$logLevel] > $this->level ) {
+        if ($this->convertLevel($level) > $this->level) {
             return $this;
         }
+
         # Handle objects implementing __toString
         $message = (string) $message;
 

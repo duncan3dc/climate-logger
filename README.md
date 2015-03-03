@@ -14,13 +14,20 @@ Combine the two for simple terminal logging:
 $somethingThatLogs->setLogger(new \duncan3dc\CLImate\Logger);
 ```
 
+By default a logger instance will hide DEBUG and log everything else, you can set a specific level like so:
+
+```php
+$logger = new \duncan3dc\CLImate\Logger(\Psr\Log\LogLevel::DEBUG);
+$somethingThatLogs->setLogger($logger);
+```
+
 ## Advanced
 You can pass your own customised instance of CLImate to the logger:
 
 ```php
 $climate = new \League\CLImate\CLImate;
 $climate->style->addCommand("debug", ["yellow", "background_black"]);
-$logger = new \duncan3dc\CLImate\Logger($climate);
+$logger = new \duncan3dc\CLImate\Logger(LogLevel::INFO, $climate);
 
 # Now my debug information will be yellow and black
 $somethingThatLogs->setLogger($logger);
