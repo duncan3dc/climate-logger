@@ -4,6 +4,7 @@ namespace duncan3dc\CLImate;
 
 use League\CLImate\CLImate;
 use Psr\Log\AbstractLogger;
+use Psr\Log\LogLevel;
 
 /**
  * A PSR-3 compatiable logger that uses CLImate for output.
@@ -16,16 +17,38 @@ class Logger extends AbstractLogger
     protected $climate;
 
     /**
+     * @var array $log_levels List of supported levels
+     */
+    protected $log_levels = [
+        LogLevel::EMERGENCY =>  1,
+        LogLevel::ALERT     =>  2,
+        LogLevel::CRITICAL  =>  3,
+        LogLevel::ERROR     =>  4,
+        LogLevel::WARNING   =>  5,
+        LogLevel::NOTICE    =>  6,
+        LogLevel::INFO      =>  7,
+        LogLevel::DEBUG     =>  8,
+    ];
+
+    /**
+     * @var int $level - Ignore logging attempts at a level less the $level
+     */
+    protected $level = null;
+
+    /**
      * Create a new Logger instance.
      *
      * @param CLImate $climate An existing CLImate instance to use for output
+     * @param string  $level   Ignore logging attempts at a level less the $level
      */
-    public function __construct(CLImate $climate = null)
+    public function __construct(CLImate $climate = null, $level=LogLevel::INFO)
     {
         if ($climate === null) {
             $climate = new CLImate;
         }
         $this->climate = $climate;
+
+        $this->setLogLevel($level);
 
         # Define some default styles to use for the output
         $commands = [
@@ -47,6 +70,17 @@ class Logger extends AbstractLogger
         }
     }
 
+    /**
+     * @param string $level Ignore logging attempts at a level less the $level
+     * @return static
+     */
+    public function setLogLevel($level) {
+        if ( ! isset($this->log_levels[$level]) ) {
+            throw new \InvalidArgumentException("Log level is invalid");
+        }
+        $this->level = $this->log_levels[$level];
+        return $this;
+    }
 
     /**
      * Log messages to a CLImate instance.
@@ -59,6 +93,10 @@ class Logger extends AbstractLogger
      */
     public function log($level, $message, array $context = [])
     {
+        $logLevel = isset($this->log_levels[$level]) ? $level : LogLevel::EMERGENCY;
+        if ( $this->log_levels[$logLevel] > $this->level ) {
+            return $this;
+        }
         # Handle objects implementing __toString
         $message = (string) $message;
 
