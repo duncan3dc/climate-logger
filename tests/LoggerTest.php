@@ -4,11 +4,12 @@ namespace duncan3dc\CLImate;
 
 use League\CLImate\CLImate;
 use Mockery;
+use Psr\Log\LogLevel;
 
 class LoggerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CLImate $cli
+     * @var Mockery\MockInterface
      */
     protected $cli;
 
@@ -25,7 +26,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $style->shouldReceive("get")->andReturn(true);
         $this->cli->style = $style;
 
-        $this->logger = new Logger($this->cli);
+        $this->logger = new Logger($this->cli, LogLevel::DEBUG);
     }
 
     public function tearDown()
@@ -83,17 +84,59 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testDEbug()
+    public function testDebug()
     {
         $this->cli->shouldReceive("debug")->once()->with("Testing debug");
         $this->logger->debug("Testing debug");
     }
 
 
-    public function tesLog()
+    public function testLog()
     {
         $this->cli->shouldReceive("critical")->once()->with("Testing log");
         $this->logger->log("critical", "Testing log");
+    }
+
+    public function testLogLevel()
+    {
+        $this->cli->shouldReceive("emergency")->once()->with("Testing log");
+        $this->logger->setLogLevel(LogLevel::EMERGENCY)->log("emergency", "Testing log");
+
+        $this->cli->shouldReceive("alert")->never()->with("Testing log");
+        $this->logger->log("alert", "Testing log");
+        $this->cli->shouldReceive("alert")->once()->with("Testing log");
+        $this->logger->setLogLevel(LogLevel::ALERT)->log("alert", "Testing log");
+
+        $this->cli->shouldReceive("critical")->never()->with("Testing log");
+        $this->logger->log("critical", "Testing log");
+        $this->cli->shouldReceive("critical")->once()->with("Testing log");
+        $this->logger->setLogLevel(LogLevel::CRITICAL)->log("critical", "Testing log");
+
+        $this->cli->shouldReceive("error")->never()->with("Testing log");
+        $this->logger->log("error", "Testing log");
+        $this->cli->shouldReceive("error")->once()->with("Testing log");
+        $this->logger->setLogLevel(LogLevel::ERROR)->log("error", "Testing log");
+
+        $this->cli->shouldReceive("warning")->never()->with("Testing log");
+        $this->logger->log("warning", "Testing log");
+        $this->cli->shouldReceive("warning")->once()->with("Testing log");
+        $this->logger->setLogLevel(LogLevel::WARNING)->log("warning", "Testing log");
+
+        $this->cli->shouldReceive("notice")->never()->with("Testing log");
+        $this->logger->log("notice", "Testing log");
+        $this->cli->shouldReceive("notice")->once()->with("Testing log");
+        $this->logger->setLogLevel(LogLevel::NOTICE)->log("notice", "Testing log");
+
+        $this->cli->shouldReceive("info")->never()->with("Testing log");
+        $this->logger->log("info", "Testing log");
+        $this->cli->shouldReceive("info")->once()->with("Testing log");
+        $this->logger->setLogLevel(LogLevel::INFO)->log("info", "Testing log");
+
+        $this->cli->shouldReceive("debug")->never()->with("Testing log");
+        $this->logger->log("debug", "Testing log");
+        $this->cli->shouldReceive("debug")->once()->with("Testing log");
+        $this->logger->setLogLevel(LogLevel::DEBUG)->log("debug", "Testing log");
+
     }
 
 
