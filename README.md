@@ -20,7 +20,7 @@ You can pass your own customised instance of CLImate to the logger:
 ```php
 $climate = new \League\CLImate\CLImate;
 $climate->style->addCommand("debug", ["yellow", "background_black"]);
-$logger = new \duncan3dc\CLImate\Logger($climate);
+$logger = new \duncan3dc\CLImate\Logger($climate, LogLevel::INFO);
 
 # Now my debug information will be yellow and black
 $somethingThatLogs->setLogger($logger);
