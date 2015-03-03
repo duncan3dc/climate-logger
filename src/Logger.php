@@ -27,7 +27,7 @@ class Logger extends AbstractLogger
         }
         $this->climate = $climate;
 
-        # Define some default styles to use for the
+        # Define some default styles to use for the output
         $commands = [
             "emergency" =>  ["white", "bold", "background_red"],
             "alert"     =>  ["white", "background_yellow"],
@@ -91,7 +91,7 @@ class Logger extends AbstractLogger
      * @param array  $context  The array of context to output
      * @param int    $indent   The current level of indentation to be used
      *
-     * @return vvoid
+     * @return void
      */
     protected function outputRecursiveContext($level, array $context, $indent)
     {

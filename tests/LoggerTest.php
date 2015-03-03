@@ -83,14 +83,14 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testDEbug()
+    public function testDebug()
     {
         $this->cli->shouldReceive("debug")->once()->with("Testing debug");
         $this->logger->debug("Testing debug");
     }
 
 
-    public function tesLog()
+    public function testLog()
     {
         $this->cli->shouldReceive("critical")->once()->with("Testing log");
         $this->logger->log("critical", "Testing log");
