@@ -2,37 +2,8 @@
 
 namespace duncan3dc\CLImate;
 
-use League\CLImate\CLImate;
-use Mockery;
-
-class LoggerTest extends \PHPUnit_Framework_TestCase
+class LoggerTest extends AbstractTest
 {
-    /**
-     * @var CLImate $cli
-     */
-    protected $cli;
-
-    /**
-     * @var Logger $logger
-     */
-    protected $logger;
-
-    public function setUp()
-    {
-        $this->cli = Mockery::mock('League\CLImate\CLImate');
-
-        $style = Mockery::mock('League\CLImate\Decorator\Style');
-        $style->shouldReceive("get")->andReturn(true);
-        $this->cli->style = $style;
-
-        $this->logger = new Logger($this->cli);
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
-    }
-
 
     public function testEmergency()
     {
