@@ -1,8 +1,10 @@
 <?php
 
-namespace duncan3dc\CLImate;
+namespace duncan3dc\CLImateTests;
 
+use duncan3dc\CLImate\Logger;
 use League\CLImate\CLImate;
+use League\CLImate\Decorator\Style;
 use Mockery;
 use Psr\Log\LogLevel;
 
@@ -13,9 +15,9 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->cli = Mockery::mock('League\CLImate\CLImate');
+        $this->cli = Mockery::mock(CLImate::class);
 
-        $style = Mockery::mock('League\CLImate\Decorator\Style');
+        $style = Mockery::mock(Style::class);
         $style->shouldReceive("get")->andReturn(true);
         $this->cli->style = $style;
 

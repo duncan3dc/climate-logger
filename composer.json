@@ -22,7 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "duncan3dc\\CLImate\\": "src/"
+            "duncan3dc\\CLImate\\": "src/",
+            "duncan3dc\\CLImateTests\\": "tests/"
         }
     }
 }

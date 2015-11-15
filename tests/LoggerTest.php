@@ -1,6 +1,6 @@
 <?php
 
-namespace duncan3dc\CLImate;
+namespace duncan3dc\CLImateTests;
 
 class LoggerTest extends AbstractTest
 {

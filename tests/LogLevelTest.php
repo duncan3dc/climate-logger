@@ -1,6 +1,6 @@
 <?php
 
-namespace duncan3dc\CLImate;
+namespace duncan3dc\CLImateTests;
 
 use Psr\Log\LogLevel;
 
