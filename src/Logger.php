@@ -7,7 +7,7 @@ use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
 /**
- * A PSR-3 compatiable logger that uses CLImate for output.
+ * A PSR-3 compatible logger that uses CLImate for output.
  */
 class Logger extends AbstractLogger
 {
