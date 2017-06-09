@@ -14,7 +14,7 @@ class Logger extends AbstractLogger
     /**
      * @var array $levels Conversion of the level strings to their numeric representations.
      */
-    protected $levels = [
+    private $levels = [
         LogLevel::EMERGENCY =>  1,
         LogLevel::ALERT     =>  2,
         LogLevel::CRITICAL  =>  3,
@@ -28,12 +28,12 @@ class Logger extends AbstractLogger
     /**
      * @var int $level Ignore logging attempts at a level less than this.
      */
-    protected $level;
+    private $level;
 
     /**
      * @var CLImate $climate The underlying climate instance we are using for output.
      */
-    protected $climate;
+    private $climate;
 
     /**
      * Create a new Logger instance.
@@ -78,7 +78,7 @@ class Logger extends AbstractLogger
      *
      * @return int
      */
-    protected function convertLevel($level)
+    private function convertLevel($level)
     {
         # If this is one of the defined string log levels then return it's numeric value
         $key = strtolower($level);
@@ -170,7 +170,7 @@ class Logger extends AbstractLogger
      *
      * @return void
      */
-    protected function outputRecursiveContext($level, array $context, $indent)
+    private function outputRecursiveContext($level, array $context, $indent)
     {
         foreach ($context as $key => $val) {
             $this->climate->tab($indent);
