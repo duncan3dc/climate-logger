@@ -1,6 +1,9 @@
 # climate-logger
 Use your best friend for the terminal with your favourite PSR-3 compatible projects
 
+[![Build Status](https://img.shields.io/travis/duncan3dc/climate-logger.svg)](https://travis-ci.org/duncan3dc/climate-logger)
+[![Latest Version](https://img.shields.io/packagist/v/duncan3dc/climate-logger.svg)](https://packagist.org/packages/duncan3dc/climate-logger)
+
 ## CLImate
 Read all about CLImate [here](http://climate.thephpleague.com/)
 
