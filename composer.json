@@ -11,6 +11,7 @@
         "homepage": "https://github.com/duncan3dc",
         "role": "Developer"
     }],
+    "abandoned": "league/climate",
     "require": {
         "league/climate": "^3.2",
         "psr/log": "1.0.0",
